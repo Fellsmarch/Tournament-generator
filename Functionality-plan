@@ -1,0 +1,106 @@
+Core Functionality:
+General Functionality
+	- Tournament name
+
+Group Stage
+	- Pool/group creation
+		○ Number of pools
+		○ Pool size
+		○ Random pool placement
+			§ Hash tables
+		○ Request team/players names
+			§ Default to numbers
+	- Number of fixtures
+		○ Round-Robin
+		○ Double Round-Robin
+		○ x number of Round-Robins
+		○ Generate list of fixtures
+			§ Include byes number of teams per pool is not even
+		○ Custom number of fixtures
+			§ Randomise fixtures
+		○ Prompt for result from each fixture
+		○ Allow user to not have to input all fixtures for a group at once
+	- Points
+		○ Points per win
+		○ Points per draw
+		○ Points per loss
+		○ Score difference
+		○ Tie-breaker at end of group stage
+			§ Score difference
+			§ (then) number of goals scored
+			§ Tie- breaker match
+	- Presets
+		○ Football presets
+			§ 4-6 teams/pool
+			§ Round-Robin
+			§ 3/1/0 points win/draw/loss
+			§ Goal difference decides ties at end
+	- Table
+		○ Display:
+			§ Current position (relative to group if applicable)
+			§ Team name
+			§ Current points
+			§ Current wins
+			§ Current draws
+			§ Current losses
+			§ Current score/goal difference
+Bracket Stage
+	- Structure
+		○ Number of allowed losses (fixtures)
+			□ Single-elimination (0 losses)
+			□ Double-elimination (1 loss)
+				□ Losers go to losers bracket
+		○ Games per fixture
+			□ Best of 3 or 5 or x (odd)
+			□ Best of 2 or 4 or x (even)
+				□ Goal difference deciding a tie
+				□ Penalties or similar deciding a further tie
+			□ Best of 1
+
+		
+
+Multi-stage
+	- Qualifying for knockouts
+		○ Top x number of teams per group
+			
+
+
+Functionality (extra):
+Group Stage
+	- Pools
+		○ Non-random pool placements
+	- Number of fixtures
+		○ Generate list of fixtures
+			□ Add locations to fixtures (field 1, field 2...)
+	- Points
+		○ Tie-breakers
+		○ If there still is a tie, only look at games between the tied teams
+			□ Number of points obtained between teams concerned
+			□ Score difference resulting from games between teams concerned
+			□ Greater number of goals scored from games between the teams concerned
+		○ Customisability of tie-breakers 
+			□ Possibly in a multi-choice list to choose precedent of conditions
+	- Presets
+	- Table
+		○ Display:
+			□ Remove current draws if draws are not allowed
+
+
+Bracket Stage
+	- Structure
+
+
+Multi-stage
+	- Qualifying for knockouts
+		○ Custom metric
+		○ High placing teams skip group stage
+
+
+
+League
+	- Could just set pools = 1, pool size to be size of the league 
+	- Home-away season
+	- Multi league system:
+		○ Promotion/Relegation
+	- Playoffs (league into knockout)
+	
