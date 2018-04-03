@@ -21,8 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import java.awt.Font;
 
-@SuppressWarnings("serial")
-public class CollectUserDataGUI extends JFrame
+
+public class CollectUserDataGUI
 	{
 		//My variables
 		/**
