@@ -47,7 +47,7 @@ public class CollectUserDataGUI
 		private JTextField numOfGroups, numOfTeams, fieldTeamName;
 		private JButton enterNumOfGroups, enterNumOfTeams, buttonEnterTeamName;
 		private JTextArea namesListOutput;
-		private JFrame frmTournamentGenerator;
+		JFrame frmTournamentGenerator;
 		private JLabel lblErrorReport;
 		//private JTextField textField;
 		private JButton buttonReset;
@@ -352,6 +352,11 @@ public class CollectUserDataGUI
 			teamsStatus.setSelected(false);
 
 		}
+		
+		public int getNumGroups() {return numGroups;}
+		public int getNumTeams() {return numTeams;}
+		public ArrayList<String> getTeams() {return teams;}
+		
 		
 //		public userData getUserData(){
 //			return numGroups, numTeams, teams;

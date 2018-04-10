@@ -25,7 +25,7 @@ public class Table {
 	
 	//Builds the empty table out of the team names
 	private void createTable() {
-		for(int teamIndex = 0; teamIndex < numTeams; teamIndex++) { 	//Iterates while the table does not have the required number of teams in it
+		for (int teamIndex = 0; teamIndex < numTeams; teamIndex++) { 	//Iterates while the table does not have the required number of teams in it
 			String teamName = teams.get(teamIndex);						//Gets the next team name to add
 			Row newRow = new Row(teamName, teamIndex + 1); 				//Creates a new row to add to the table
 			table.add(newRow);											//Adds the new row to the table
