@@ -1,4 +1,6 @@
 /**
+ * ***This is the old class, I changed it over to "Team" to be more intuitive***
+ * 
  * This class creates a row with the following columns:
  * Postion | Team Name | Wins | Draws | Losses | Goal Difference | Goals Scored | Goals Conceded
  * The toString method is mainly used for testing, as the final product will be directly put into a GUI

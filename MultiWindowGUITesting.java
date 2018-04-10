@@ -51,7 +51,7 @@ public class MultiWindowGUITesting {
 	 */
 	private void initialize() {
 		//frame = new JFrame();
-		frame.setBounds(100, 100, 675, 449);
+		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//frame.getContentPane().setLayout(new CardLayout(0, 0)); //sets the frame to CardLayout
 		frame.getContentPane().add(cardContainer);
@@ -136,7 +136,7 @@ public class MultiWindowGUITesting {
 		
 		//JPanel mainScreen = new JPanel(SpringLayout);
 		
-		JPanel group = new IndividualPanelTest();
+		JPanel group = new GroupStageCreationPanel();
 		cardContainer.add(group, "Group Tournament");
 		
 		//fram

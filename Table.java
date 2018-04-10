@@ -14,7 +14,7 @@ public class Table {
 	
 	private int numTeams;									//The number of teams to be in the table
 	private ArrayList<String> teams;						//The names of the teams to be in the table
-	private ArrayList<Row> table = new ArrayList<Row>();	//Initialises the table itself
+	private ArrayList<Team> table = new ArrayList<Team>();	//Initialises the table itself
 	
 	//Constructor
 	public Table(ArrayList<String> teamNames) {
@@ -27,8 +27,8 @@ public class Table {
 	private void createTable() {
 		for (int teamIndex = 0; teamIndex < numTeams; teamIndex++) { 	//Iterates while the table does not have the required number of teams in it
 			String teamName = teams.get(teamIndex);						//Gets the next team name to add
-			Row newRow = new Row(teamName, teamIndex + 1); 				//Creates a new row to add to the table
-			table.add(newRow);											//Adds the new row to the table
+			Team newTeam = new Team(teamName, teamIndex + 1); 				//Creates a new row to add to the table
+			table.add(newTeam);											//Adds the new row to the table
 		}
 	}
 	
@@ -36,15 +36,15 @@ public class Table {
 	 * Getter method
 	 * @return The table itself
 	 */
-	public ArrayList<Row> getTable() {
+	public ArrayList<Team> getTable() {
 		return table;
 	}
 	
 	
 	public String toString() { //Not used when using the GUI, mainly used for testing purposes
 		String toPrint = "";
-		for(Row row : table) {
-			String toAdd = "\n" + row.toString();
+		for(Team team : table) {
+			String toAdd = "\n" + team.toString();
 			toPrint += toAdd;
 		}
 		return toPrint;
