@@ -1,39 +1,34 @@
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;
+import net.miginfocom.swing.MigLayout;
+import javax.swing.SpringLayout;
 
+@SuppressWarnings("serial")
 public class GroupStageDisplayPanel extends JPanel
 	{
-	private JTable table;
-	private JTable table_1;
 
 		/**
 		 * Create the panel.
 		 */
-		public GroupStageDisplayPanel(GroupStage groupStage)
-			{ 
-			ArrayList<Table> groups = groupStage.getGroups();
-			setLayout(new MigLayout("", "[grow]", "[grow]"));
+		public GroupStageDisplayPanel(ArrayList<GroupPanel> groupPanels)
+			{
+			SpringLayout springLayout = new SpringLayout();
+			setLayout(springLayout);
 			
-			JScrollPane scrollPane = new JScrollPane();
-			add(scrollPane, "cell 0 0,grow");
+			JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+			springLayout.putConstraint(SpringLayout.NORTH, tabbedPane, 6, SpringLayout.NORTH, this);
+			springLayout.putConstraint(SpringLayout.WEST, tabbedPane, 6, SpringLayout.WEST, this);
+			springLayout.putConstraint(SpringLayout.SOUTH, tabbedPane, 290, SpringLayout.NORTH, this);
+			springLayout.putConstraint(SpringLayout.EAST, tabbedPane, -10, SpringLayout.EAST, this);
+			add(tabbedPane);
 			
-			table_1 = new JTable();
-			scrollPane.setViewportView(table_1);
-				
-			
-
-				
-			
-			for (Table group : groups) {
-				for (Team team : group.getTable()) {
-					
-				}
+			int groupNum = 1;
+			for(GroupPanel groupPanel : groupPanels) {
+				String tabTitle = "Group " + groupNum;
+				tabbedPane.addTab(tabTitle, groupPanel);
 			}
 			}
-
 	}

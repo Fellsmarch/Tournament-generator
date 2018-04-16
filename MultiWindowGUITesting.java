@@ -56,10 +56,11 @@ public class MultiWindowGUITesting {
 	 */
 	private void initialize() throws InterruptedException {
 		//frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 450, 350);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//frame.getContentPane().setLayout(new CardLayout(0, 0)); //sets the frame to CardLayout
 		frame.getContentPane().add(cardContainer);
+		frame.setResizable(false);
 		
 		JPanel mainScreen = new JPanel();
 		cardContainer.add(mainScreen, "name_513900034118511");

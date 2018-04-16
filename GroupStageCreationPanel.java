@@ -17,6 +17,9 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTextPane;
 import java.awt.Color;
+import javax.swing.JComboBox;
+import javax.swing.JRadioButton;
+import javax.swing.JToggleButton;
 
 
 
@@ -35,6 +38,11 @@ public class GroupStageCreationPanel extends JPanel
 				private int numTeams;
 				private boolean groupsAccepted = false; //If the input for groups has been accepted
 				private boolean teamsAccepted = false;  //If the input for teams has been accepted
+				private int pointsPerWin = 3;
+				private int pointsPerDraw = 1;
+				private int pointsPerLoss = 0;
+				private NumFixtures numFixtures = NumFixtures.SINGLE_ROUND_ROBIN;
+				
 				/**
 				 * The list of teams (their names) to be put into the groups
 				 */
@@ -54,6 +62,18 @@ public class GroupStageCreationPanel extends JPanel
 				private JTextPane teamNamesOutput;
 				private JScrollPane teamNamesContainer;
 				private JButton btnConfirm;
+				private JRadioButton rdbtnSingleRoundRobin;
+				private JRadioButton rdbtnDoubleRoundRobin;
+				private JLabel lblPoints;
+				private JLabel lblWin;
+				private JTextField winField;
+				private JLabel lblDraw;
+				private JTextField lossField;
+				private JLabel lblLoss;
+				private JTextField drawField;
+				private JButton btnPoints;
+				private JCheckBox chckbxPoints;
+				private JCheckBox chckbxTeamNames;
 
 				
 
@@ -63,16 +83,71 @@ public class GroupStageCreationPanel extends JPanel
 		 * Create the panel.
 		 */
 		public GroupStageCreationPanel() {
-			setLayout(new MigLayout("", "[grow][grow][grow][grow][grow][grow][][]", "[][][][][grow][grow][][][][]"));
+			setLayout(new MigLayout("", "[grow][grow][grow][grow][]", "[][][][][][][][grow][grow][][][][]"));
 			
 			lblGroups = new JLabel("How many groups do you want?");
-			add(lblGroups, "flowx,cell 0 0 6 1,alignx left");
+			add(lblGroups, "flowx,cell 0 0 3 1,alignx left");
+			
+			
+			btnGroups = new JButton("Submit");
+			btnGroups.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					groupsButton();
+				}
+			});
+			add(btnGroups, "cell 3 0,growx");
+			
+			chckbxGroups = new JCheckBox("");
+			chckbxGroups.setEnabled(false);
+			add(chckbxGroups, "cell 4 0");
 			
 			lblTeams = new JLabel("How many teams do you want?");
-			add(lblTeams, "flowx,cell 0 1 6 1,alignx left");
+			add(lblTeams, "flowx,cell 0 1 3 1,alignx left");
+			
+			rdbtnSingleRoundRobin = new JRadioButton("Single Round Robin");
+			rdbtnSingleRoundRobin.setSelected(true);
+			rdbtnSingleRoundRobin.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					rdbtnDoubleRoundRobin.setSelected(false);
+					numFixtures = NumFixtures.SINGLE_ROUND_ROBIN;
+				}
+			});
+			
+			
+			btnTeams = new JButton("Submit");
+			btnTeams.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					teamsButton();
+				}
+			});
+			add(btnTeams, "cell 3 1,growx");
+			
+			chckbxTeams = new JCheckBox("");
+			chckbxTeams.setEnabled(false);
+			add(chckbxTeams, "cell 4 1");
+			add(rdbtnSingleRoundRobin, "flowx,cell 0 2 5 1");
+			
+			lblPoints = new JLabel("Number of points per");
+			add(lblPoints, "cell 0 3 2 1");
+			
+			lblWin = new JLabel("Win:");
+			add(lblWin, "flowx,cell 0 4 3 1,alignx left");
+			
+			btnPoints = new JButton("Submit");
+			btnPoints.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					pointsButton();
+				}
+			});
+			add(btnPoints, "cell 3 4,growx");
+			
+			chckbxPoints = new JCheckBox("");
+			chckbxPoints.setEnabled(false);
+			add(chckbxPoints, "cell 4 4");
+			
 			
 			lblEnterTeamNames = new JLabel("Please enter team names one by one:");
-			add(lblEnterTeamNames, "cell 0 2 6 1,alignx left");
+			add(lblEnterTeamNames, "cell 0 5 5 1,alignx left");
 			
 			teamNameField = new JTextField();
 			teamNameField.addActionListener(new ActionListener() {
@@ -84,34 +159,8 @@ public class GroupStageCreationPanel extends JPanel
 			
 			
 			teamNameField.setEnabled(false);
-			add(teamNameField, "cell 0 3 6 1,growx");
+			add(teamNameField, "cell 0 6 3 1,growx");
 			teamNameField.setColumns(10);
-			
-			
-			btnGroups = new JButton("Submit");
-			btnGroups.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					groupsButton();
-				}
-			});
-			add(btnGroups, "cell 6 0");
-			
-			chckbxGroups = new JCheckBox("");
-			chckbxGroups.setEnabled(false);
-			add(chckbxGroups, "cell 7 0");
-			
-			
-			btnTeams = new JButton("Submit");
-			btnTeams.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					teamsButton();
-				}
-			});
-			add(btnTeams, "cell 6 1");
-			
-			chckbxTeams = new JCheckBox("");
-			chckbxTeams.setEnabled(false);
-			add(chckbxTeams, "cell 7 1");
 			
 			
 			btnTeamName = new JButton("Submit");
@@ -121,16 +170,11 @@ public class GroupStageCreationPanel extends JPanel
 				}
 			});
 			btnTeamName.setEnabled(false);
-			add(btnTeamName, "cell 6 3");
+			add(btnTeamName, "cell 3 6,growx");
 			
-			btnUndoTeamName = new JButton("Undo");
-			btnUndoTeamName.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					removeLastTeam();
-				}
-			});
-			btnUndoTeamName.setEnabled(false);
-			add(btnUndoTeamName, "cell 6 4,growx,aligny top");
+			chckbxTeamNames = new JCheckBox("");
+			chckbxTeamNames.setEnabled(false);
+			add(chckbxTeamNames, "cell 4 6");
 			
 
 			
@@ -141,9 +185,32 @@ public class GroupStageCreationPanel extends JPanel
 			//add(teamNamesOutput, "flowx,cell 0 4 3 5,grow");
 			
 			teamNamesContainer = new JScrollPane();
-			add(teamNamesContainer, "cell 0 4 6 5,grow");
+			add(teamNamesContainer, "cell 0 7 3 5,grow");
 			
 			teamNamesContainer.setViewportView(teamNamesOutput);
+			
+			btnUndoTeamName = new JButton("Undo");
+			btnUndoTeamName.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					removeLastTeam();
+				}
+			});
+			btnUndoTeamName.setEnabled(false);
+			add(btnUndoTeamName, "cell 3 7,growx,aligny top");
+			
+			btnConfirm = new JButton("Confirm");
+			btnConfirm.setEnabled(false);
+			btnConfirm.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+						if(chckbxPoints.isSelected()) {
+						int confirmContinue = JOptionPane.showConfirmDialog(null, "Are you sure you want to continue with these teams?", "Confirm Continue", JOptionPane.YES_NO_CANCEL_OPTION);
+						if(confirmContinue == JOptionPane.YES_OPTION) {
+							groupStage = new GroupStage(numGroups, numTeams, teams);
+						}
+					}else {lblError.setText("ERROR: Please submit number of points per win/draw/loss!");}
+				}
+			});
+			add(btnConfirm, "cell 3 10,growx");
 			
 			
 
@@ -153,43 +220,68 @@ public class GroupStageCreationPanel extends JPanel
 					reset();
 				}
 			});
-			
-			btnConfirm = new JButton("Confirm");
-			btnConfirm.setEnabled(false);
-			btnConfirm.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					int confirmContinue = JOptionPane.showConfirmDialog(null, "Are you sure you want to continue with these teams?", "Confirm Continue", JOptionPane.YES_NO_CANCEL_OPTION);
-					if(confirmContinue == JOptionPane.YES_OPTION) {
-						groupStage = new GroupStage(numGroups, numTeams, teams);
-					}
-				}
-			});
-			add(btnConfirm, "cell 6 7");
-			add(btnReset, "cell 6 8,growx");
+			add(btnReset, "cell 3 11,growx");
 			
 			lblError = new JLabel(" ");
 			lblError.setForeground(Color.RED);
-			add(lblError, "cell 0 9 8 1");
+			add(lblError, "cell 0 12 5 1");
 			
-			numGroupsField = new JTextField();
-			numGroupsField.addActionListener(new ActionListener() {
+			winField = new JTextField();
+			winField.setText("3");
+			winField.setColumns(3);
+			add(winField, "cell 0 4 3 1,alignx center");
+			
+			lblDraw = new JLabel(" Draw:");
+			add(lblDraw, "cell 0 4 3 1,alignx center");
+			
+			drawField = new JTextField();
+			drawField.setText("1");
+			add(drawField, "cell 0 4 3 1");
+			drawField.setColumns(3);
+			
+			lblLoss = new JLabel("Loss");
+			add(lblLoss, "cell 0 4 3 1");
+			
+			lossField = new JTextField();
+			lossField.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					groupsButton();
+					pointsButton();
 				}
 			});
-			add(numGroupsField, "cell 5 0,growx");
-		
-			
-			
-			
-			
-			numTeamsField = new JTextField();
-			numTeamsField.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					teamsButton();
-				}
-			});
-			add(numTeamsField, "cell 5 1,growx");
+			lossField.setText("0");
+			add(lossField, "cell 0 4 3 1");
+			lossField.setColumns(3);
+				
+				numGroupsField = new JTextField();
+				numGroupsField.setColumns(3);
+				numGroupsField.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						groupsButton();
+					}
+				});
+				add(numGroupsField, "cell 2 0,alignx right");
+				
+					
+					
+					
+					
+					numTeamsField = new JTextField();
+					numTeamsField.setColumns(3);
+					numTeamsField.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							teamsButton();
+						}
+					});
+					add(numTeamsField, "cell 2 1,alignx right");
+					
+					rdbtnDoubleRoundRobin = new JRadioButton("Double Round Robin");
+					rdbtnDoubleRoundRobin.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							rdbtnSingleRoundRobin.setSelected(false);
+							numFixtures = NumFixtures.DOUBLE_ROUND_ROBIN;
+						}
+					});
+					add(rdbtnDoubleRoundRobin, "cell 0 2 5 1,alignx right");
 
 		}
 				
@@ -198,7 +290,7 @@ public class GroupStageCreationPanel extends JPanel
 			try {
 				numGroups = Integer.parseInt(numGroupsField.getText());
 				if (numGroups < 1) {
-					throw (new Exception());
+					throw (new Exception()); //Should make this a specific exception
 				}
 				chckbxGroups.setSelected(true);
 				//checkboxX.setText("");
@@ -206,7 +298,7 @@ public class GroupStageCreationPanel extends JPanel
 				lblError.setText(" ");
 				groupsAccepted = true;
 				unlockTeamNamesInput();
-			} catch(Exception exception) {
+			} catch(Exception exception) { //Should make this a specific exception
 				numGroupsField.setText("");
 				chckbxGroups.setSelected(false);
 				//checkboxX.setText("x");
@@ -224,15 +316,16 @@ public class GroupStageCreationPanel extends JPanel
 			try {
 				numTeams = Integer.parseInt(numTeamsField.getText());
 				if (numTeams < 1) {
-					throw (new Exception());
+					throw (new Exception()); //Should make this a specific exception
 				}
 				chckbxTeams.setSelected(true);
 				//checkboxX2.setText("");
-				teamNameField.requestFocus();
+				//teamNameField.requestFocus();
+				winField.requestFocus();
 				lblError.setText(" ");
 				teamsAccepted = true;
 				unlockTeamNamesInput();
-			} catch(Exception exception) {
+			} catch(Exception exception) { //Should make this a specific exception
 				numTeamsField.setText("");
 				chckbxTeams.setSelected(false);
 				//checkboxX2.setText("x");
@@ -240,6 +333,26 @@ public class GroupStageCreationPanel extends JPanel
 				teamsAccepted = false;
 				unlockTeamNamesInput();
 				lblError.setText("ERROR: Number of groups must be an integer greater than 0");
+			}
+		}
+		
+		private void pointsButton() {
+			try {
+				pointsPerWin = Integer.parseInt(winField.getText());
+				pointsPerDraw = Integer.parseInt(drawField.getText());
+				pointsPerLoss = Integer.parseInt(lossField.getText());
+//				if(pointsPerWin < 1 || pointsPerDraw < 1 || pointsPerLoss < 1) {
+//					throw (new Exception());
+//				}
+				chckbxPoints.setSelected(true);
+				lblError.setText(" ");
+				if(teamNameField.isEnabled()) {
+					teamNameField.requestFocus();
+				}else {numGroupsField.requestFocus();}
+			} catch(Exception exception) {
+				chckbxPoints.setSelected(false);
+				winField.requestFocus();
+				lblError.setText("ERROR: Number of points must be an integer");
 			}
 		}
 		
@@ -265,7 +378,8 @@ public class GroupStageCreationPanel extends JPanel
 				if (teams.size() >= maxTeams) { 		//If the number of teams input >= the number of teams that should be in the tournament,
 					btnTeamName.setEnabled(false);		//don't let the user input any more teams
 					btnConfirm.setEnabled(true);
-				}
+					chckbxTeamNames.setSelected(true);
+				}else {teamNameField.requestFocus();}
 			}
 			
 			
@@ -300,6 +414,7 @@ public class GroupStageCreationPanel extends JPanel
 			int maxTeams = numGroups * numTeams;
 			if(teams.size() < maxTeams) {
 				btnConfirm.setEnabled(false);
+				chckbxTeamNames.setSelected(false);
 			}
 			
 			if (teams.size() < 1) {
@@ -309,7 +424,7 @@ public class GroupStageCreationPanel extends JPanel
 		}
 		
 		private void reset() { //Resets all values so that the user can re-enter group size, team size and team names
-			int confirmReset = JOptionPane.showConfirmDialog(this, "Are you sure you want to reset?\nAll data will be lost!", "Confirm reset", JOptionPane.YES_NO_OPTION); //Creates a popup confirming that they user wants to reset
+			int confirmReset = JOptionPane.showConfirmDialog(this, "Are you sure you want to reset?\nAll data will be lost!", "Confirm reset", JOptionPane.YES_NO_CANCEL_OPTION); //Creates a popup confirming that they user wants to reset
 			if (confirmReset == JOptionPane.YES_OPTION) {
 				numGroups = 0;
 				numTeams = 0;
@@ -319,8 +434,6 @@ public class GroupStageCreationPanel extends JPanel
 				btnGroups.setEnabled(true);
 				numTeamsField.setEditable(true);
 				btnTeams.setEnabled(true);
-				//checkboxX.setText("x");
-				//checkboxX2.setText("x");
 				numGroupsField.setText("");
 				numTeamsField.setText("");
 				groupsAccepted = false;
@@ -331,6 +444,19 @@ public class GroupStageCreationPanel extends JPanel
 				numGroupsField.requestFocus();
 				chckbxGroups.setSelected(false);
 				chckbxTeams.setSelected(false);
+				rdbtnSingleRoundRobin.setSelected(true);
+				rdbtnDoubleRoundRobin.setSelected(false);
+				winField.setText("3"); pointsPerWin = 3;
+				drawField.setText("1"); pointsPerDraw = 1;
+				lossField.setText("0"); pointsPerLoss = 0;
+				chckbxPoints.setSelected(false);
+				chckbxTeamNames.setSelected(false);
+				btnConfirm.setEnabled(false);
 			}
+		}
+		
+		public Object[] getGroupStageData() {
+			Object[] toReturn = {teams, pointsPerWin, pointsPerDraw, pointsPerLoss, numFixtures};
+			return toReturn;
 		}
 	}

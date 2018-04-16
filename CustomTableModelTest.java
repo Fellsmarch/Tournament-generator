@@ -1,5 +1,6 @@
 import javax.swing.table.AbstractTableModel;
 
+@SuppressWarnings("serial")
 public class CustomTableModelTest extends AbstractTableModel {
 		private String[] columnNames = {"Position", "Team Name", "Wins", "Draws", "Losses", 
 				"Goal Difference", "Goals For", "Goals Against", "Points"};
