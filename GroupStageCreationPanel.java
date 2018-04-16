@@ -39,6 +39,9 @@ public class GroupStageCreationPanel extends JPanel
 				 * The list of teams (their names) to be put into the groups
 				 */
 				private ArrayList<String> teams = new ArrayList<String>(); //The list of team names
+				
+				private GroupStage groupStage;
+				
 //				private JTextField numGroupsFieldInput;
 //				private JTextField numTeamsFieldInput;
 				
@@ -50,6 +53,7 @@ public class GroupStageCreationPanel extends JPanel
 				private JLabel lblError;
 				private JTextPane teamNamesOutput;
 				private JScrollPane teamNamesContainer;
+				private JButton btnConfirm;
 
 				
 
@@ -149,6 +153,18 @@ public class GroupStageCreationPanel extends JPanel
 					reset();
 				}
 			});
+			
+			btnConfirm = new JButton("Confirm");
+			btnConfirm.setEnabled(false);
+			btnConfirm.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					int confirmContinue = JOptionPane.showConfirmDialog(null, "Are you sure you want to continue with these teams?", "Confirm Continue", JOptionPane.YES_NO_CANCEL_OPTION);
+					if(confirmContinue == JOptionPane.YES_OPTION) {
+						groupStage = new GroupStage(numGroups, numTeams, teams);
+					}
+				}
+			});
+			add(btnConfirm, "cell 6 7");
 			add(btnReset, "cell 6 8,growx");
 			
 			lblError = new JLabel(" ");
@@ -248,6 +264,7 @@ public class GroupStageCreationPanel extends JPanel
 				int maxTeams = numGroups * numTeams; 	//The number of teams in the tournament = the number of groups * the number of teams
 				if (teams.size() >= maxTeams) { 		//If the number of teams input >= the number of teams that should be in the tournament,
 					btnTeamName.setEnabled(false);		//don't let the user input any more teams
+					btnConfirm.setEnabled(true);
 				}
 			}
 			
@@ -280,8 +297,14 @@ public class GroupStageCreationPanel extends JPanel
 			teams.remove(length);
 			updateOutputList();
 			btnTeamName.setEnabled(true); //This is only here for if the max number of teams has been reached and the submit button has been disabled
+			int maxTeams = numGroups * numTeams;
+			if(teams.size() < maxTeams) {
+				btnConfirm.setEnabled(false);
+			}
+			
 			if (teams.size() < 1) {
 				btnUndoTeamName.setEnabled(false);
+				
 			}
 		}
 		

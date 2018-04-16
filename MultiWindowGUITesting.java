@@ -3,10 +3,13 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import java.awt.CardLayout;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.SpringLayout;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
@@ -41,15 +44,17 @@ public class MultiWindowGUITesting {
 
 	/**
 	 * Create the application.
+	 * @throws InterruptedException 
 	 */
-	public MultiWindowGUITesting() {
+	public MultiWindowGUITesting() throws InterruptedException {
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws InterruptedException 
 	 */
-	private void initialize() {
+	private void initialize() throws InterruptedException {
 		//frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,7 +106,7 @@ public class MultiWindowGUITesting {
 		sl_mainScreen.putConstraint(SpringLayout.WEST, cardCombo, 79, SpringLayout.WEST, lblChooseTournament);
 		sl_mainScreen.putConstraint(SpringLayout.EAST, cardCombo, 0, SpringLayout.EAST, textFieldTournamentName);
 		cardCombo.addItem("Group Tournament"); cardCombo.addItem("Knockout Tournament"); cardCombo.addItem("Multi-stage Tournament");
-		cardCombo.addItem("League Tournament");
+		cardCombo.addItem("League Tournament"); cardCombo.addItem("Table Test");
 		mainScreen.add(cardCombo);
 		
 		JLabel lblError = new JLabel("");
@@ -138,6 +143,26 @@ public class MultiWindowGUITesting {
 		
 		JPanel group = new GroupStageCreationPanel();
 		cardContainer.add(group, "Group Tournament");
+		
+		String[] teams = {"Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6", "Team 7", 
+				"Team 8", "Team 9", "Team 10", "Team 11", "Team 12", "Team 13", "Team 14", "Team 15", 
+				"Team 16"};
+		
+		
+		CustomTableModelTest modelTest = new CustomTableModelTest(4, teams, 3, 1, 0);
+		JTable testTable = new JTable(modelTest);
+		JScrollPane testPane = new JScrollPane(testTable);
+		JPanel testPanel = new JPanel();
+		testPanel.add(testPane);
+		modelTest.addResult("Team 1", "Team 3", 3, 2);
+		modelTest.addResult("Team 4", "Team 2", 2, 0);
+		//GUITablePanel tablePanel = new GUITablePanel(4, teams, 3, 1, 0);
+		cardContainer.add(testPanel, "Table Test");
+		//tablePanel.table.
+		
+		//Thread.sleep(10000);
+		//tablePanel.addResult("Team 1" "Team 3", 3, 2);
+		//tablePanel.table.addResult
 		
 		//fram
 		//JPanel mainScreen = new JPanel();
