@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.Comparator;
+
 import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial")
@@ -14,7 +17,8 @@ public class CustomTableModelTest extends AbstractTableModel {
 		
 		public CustomTableModelTest(int numberOfTeams, String[] teamNameList, int PPWin, int PPDraw, int PPLoss) {
 			teamNames = teamNameList;
-			numTeams = numberOfTeams;
+			//numTeams = numberOfTeams;
+			numTeams = teamNameList.length;
 			pointsPerWin = PPWin; pointsPerDraw = PPDraw; pointsPerLoss = PPLoss;
 			
 			tableData = new Object[numTeams][9];
@@ -90,23 +94,32 @@ public class CustomTableModelTest extends AbstractTableModel {
 			//Update position & goal difference (could be done in a method instead, but I don't think it will be used outside this method)
 			tableData[homeTeamIndex][5] = (Integer) tableData[homeTeamIndex][6] - (Integer) tableData[homeTeamIndex][7]; //Home team goal difference
 			tableData[awayTeamIndex][5] = (Integer) tableData[awayTeamIndex][6] - (Integer) tableData[awayTeamIndex][7]; //Away team goal difference
-			//Insertion sort --> This checks every position, so might be better in its own method
-			int temp;
-			for(int i = 1; i < numTeams; i++) {
-				for(int j = 1; j > 0; j--) {
-					if((Integer) tableData[j][8] < (Integer) tableData[j-1][8]) {
-						//Swap teams
-						temp = (Integer) tableData[j][8];
-						tableData[j][8] = tableData[j-1][8];
-						tableData[j-1][8] = temp;
-						
-						//Swap positions
-						temp = (Integer) tableData[j][0];
-						tableData[j][0] = (Integer) tableData[j-1][0];
-						tableData[j-1][0] = temp;
+			
+			Arrays.sort(tableData, new TeamComparator()); 	//Sorts the table into the correct order
+			int pos = 1;
+			for(Object[] row : tableData) { 				//Since the sort does not change the position number,
+				row[0] = pos;								//I change it here
+				pos++;
+			}
+			fireTableDataChanged(); //Tells the table that all data may have been updated, could update each cell, but 6 out of 9 cells will always need to be updated
+		}
+		
+		class TeamComparator implements Comparator<Object[]>{ //Tells the sorting method how to sort (does it in ascending order, so the return statements are reversed)
+			public int compare(Object[] team1, Object[] team2) {
+				int team1Pts = (Integer) team1[8]; int team2Pts = (Integer) team2[8];
+				if(team1Pts < team2Pts) {return 1;}
+				else if(team1Pts > team2Pts) {return -1;}
+				else {
+					int team1GD = (Integer) team1[5]; int team2GD = (Integer) team2[5];
+					if(team1GD < team2GD) {return 1;}
+					else if(team1GD > team2GD) {return -1;}
+					else {
+						int team1GF = (Integer) team1[6]; int team2GF = (Integer) team2[6];
+						if(team1GF < team2GF) {return 1;}
+						else if(team1GF > team2GF) {return -1;}
+						else {return 0;}
 					}
 				}
 			}
-			fireTableDataChanged(); //Tells the table that all data may have been updated, could update each cell, but 6 out of 9 cells will always need to be updated
 		}
 	}

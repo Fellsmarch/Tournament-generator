@@ -14,6 +14,8 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 
@@ -25,21 +27,29 @@ public class MultiWindowGUITesting {
 	private String tournamentName;
 	private Tournament tournamentType;
 	private JTextField textFieldTournamentName;
+	private CustomTableModelTest modelTest;
 
 	/**
 	 * Launch the application.
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MultiWindowGUITesting window = new MultiWindowGUITesting();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	public static void main(String[] args) throws InterruptedException {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					MultiWindowGUITesting window = new MultiWindowGUITesting();
+//					window.frame.setVisible(true);
+//					
+//					
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+		MultiWindowGUITesting window = new MultiWindowGUITesting();
+		window.frame.setVisible(true);
+		Thread.sleep(7000);
+		window.modelTest.addResult("Team 1", "Team 3", 2, 6);
 	}
 
 	/**
@@ -60,7 +70,7 @@ public class MultiWindowGUITesting {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//frame.getContentPane().setLayout(new CardLayout(0, 0)); //sets the frame to CardLayout
 		frame.getContentPane().add(cardContainer);
-		frame.setResizable(false);
+		frame.setResizable(true);
 		
 		JPanel mainScreen = new JPanel();
 		cardContainer.add(mainScreen, "name_513900034118511");
@@ -106,8 +116,8 @@ public class MultiWindowGUITesting {
 		sl_mainScreen.putConstraint(SpringLayout.NORTH, cardCombo, 6, SpringLayout.SOUTH, lblChooseTournament);
 		sl_mainScreen.putConstraint(SpringLayout.WEST, cardCombo, 79, SpringLayout.WEST, lblChooseTournament);
 		sl_mainScreen.putConstraint(SpringLayout.EAST, cardCombo, 0, SpringLayout.EAST, textFieldTournamentName);
-		cardCombo.addItem("Group Tournament"); cardCombo.addItem("Knockout Tournament"); cardCombo.addItem("Multi-stage Tournament");
-		cardCombo.addItem("League Tournament"); cardCombo.addItem("Table Test");
+		cardCombo.addItem("Group Tournament"); cardCombo.addItem("GroupPanel Test");//cardCombo.addItem("Knockout Tournament"); cardCombo.addItem("Multi-stage Tournament");
+		//cardCombo.addItem("League Tournament"); cardCombo.addItem("Table Test");
 		mainScreen.add(cardCombo);
 		
 		JLabel lblError = new JLabel("");
@@ -140,29 +150,33 @@ public class MultiWindowGUITesting {
 		
 		
 		
-		//JPanel mainScreen = new JPanel(SpringLayout);
-		
+		//Group testing
+		//Table panel
 		JPanel group = new GroupStageCreationPanel();
 		cardContainer.add(group, "Group Tournament");
-		
 		String[] teams = {"Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6", "Team 7", 
 				"Team 8", "Team 9", "Team 10", "Team 11", "Team 12", "Team 13", "Team 14", "Team 15", 
 				"Team 16"};
-		
-		
-		CustomTableModelTest modelTest = new CustomTableModelTest(4, teams, 3, 1, 0);
+		modelTest = new CustomTableModelTest(4, teams, 3, 1, 0);
 		JTable testTable = new JTable(modelTest);
 		JScrollPane testPane = new JScrollPane(testTable);
 		JPanel testPanel = new JPanel();
 		testPanel.add(testPane);
-		modelTest.addResult("Team 1", "Team 3", 3, 2);
+		//modelTest.addResult("Team 1", "Team 3", 3, 2);
 		modelTest.addResult("Team 4", "Team 2", 2, 0);
-		//GUITablePanel tablePanel = new GUITablePanel(4, teams, 3, 1, 0);
-		cardContainer.add(testPanel, "Table Test");
-		//tablePanel.table.
+		//cardContainer.add(testPanel, "Table Test");
+
+		//Fixtures panel
+//		String[] tempTeams = {"Team 1", "Team 2", "Team 3", "Team 4", "Vinnie is lameeeeeeeeee"};
+//		ArrayList<String> teamsList = new ArrayList<String>(Arrays.asList(tempTeams));
+//		FixturesPanel fixturesPanel = new FixturesPanel(teamsList, NumFixtures.SINGLE_ROUND_ROBIN);
+//		
+//		//GroupPanel
+//		GroupPanel groupPanel = new GroupPanel(testPanel, fixturesPanel);
+//		cardContainer.add(groupPanel, "GroupPanel Test");
 		
-		//Thread.sleep(10000);
-		//tablePanel.addResult("Team 1" "Team 3", 3, 2);
+		
+		
 		//tablePanel.table.addResult
 		
 		//fram

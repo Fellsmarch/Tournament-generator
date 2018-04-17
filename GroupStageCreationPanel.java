@@ -2,6 +2,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -16,6 +17,8 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTextPane;
+
+import java.awt.CardLayout;
 import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
@@ -47,35 +50,21 @@ public class GroupStageCreationPanel extends JPanel
 				 * The list of teams (their names) to be put into the groups
 				 */
 				private ArrayList<String> teams = new ArrayList<String>(); //The list of team names
-				
-				private GroupStage groupStage;
-				
-//				private JTextField numGroupsFieldInput;
-//				private JTextField numTeamsFieldInput;
-				
-				//GUI Objects (instantiated here so I can call them in my methods below)
-				private JLabel lblGroups, lblTeams, lblEnterTeamNames;
-				private JCheckBox chckbxGroups, chckbxTeams;
-				private JTextField numGroupsField, numTeamsField, teamNameField;
-				private JButton btnGroups, btnTeams, btnTeamName, btnUndoTeamName, btnReset;
-				private JLabel lblError;
-				private JTextPane teamNamesOutput;
-				private JScrollPane teamNamesContainer;
-				private JButton btnConfirm;
-				private JRadioButton rdbtnSingleRoundRobin;
-				private JRadioButton rdbtnDoubleRoundRobin;
-				private JLabel lblPoints;
-				private JLabel lblWin;
-				private JTextField winField;
-				private JLabel lblDraw;
-				private JTextField lossField;
-				private JLabel lblLoss;
-				private JTextField drawField;
-				private JButton btnPoints;
-				private JCheckBox chckbxPoints;
-				private JCheckBox chckbxTeamNames;
+				private GroupStagePanel groupStage;
+				private CardLayout cardLayout = new CardLayout();
+				private JPanel container = new JPanel(cardLayout);
 
 				
+				//GUI Objects (instantiated here so I can call them in my methods below)
+				private JLabel lblGroups, lblTeams, lblEnterTeamNames, lblPoints, lblError, lblWin, lblDraw, lblLoss;
+				private JCheckBox chckbxGroups, chckbxTeams, chckbxTeamNames, chckbxPoints;
+				private JTextField numGroupsField, numTeamsField, teamNameField, winField, lossField, drawField;
+				private JButton btnGroups, btnTeams, btnTeamName, btnUndoTeamName, btnReset, btnPoints, btnConfirm;
+				private JTextPane teamNamesOutput;
+				private JScrollPane teamNamesContainer;
+				private JRadioButton rdbtnSingleRoundRobin, rdbtnDoubleRoundRobin;
+
+
 
 
 
@@ -83,6 +72,15 @@ public class GroupStageCreationPanel extends JPanel
 		 * Create the panel.
 		 */
 		public GroupStageCreationPanel() {
+			add(container);
+			GetGroupStageDataPanel mainWindow = new GetGroupStageDataPanel();
+			container.add(mainWindow, "Main Window");
+			cardLayout.show(container, "Main Window");
+		}
+			
+		class GetGroupStageDataPanel extends JPanel {
+			
+			public GetGroupStageDataPanel() {
 			setLayout(new MigLayout("", "[grow][grow][grow][grow][]", "[][][][][][][][grow][grow][][][][]"));
 			
 			lblGroups = new JLabel("How many groups do you want?");
@@ -205,7 +203,9 @@ public class GroupStageCreationPanel extends JPanel
 						if(chckbxPoints.isSelected()) {
 						int confirmContinue = JOptionPane.showConfirmDialog(null, "Are you sure you want to continue with these teams?", "Confirm Continue", JOptionPane.YES_NO_CANCEL_OPTION);
 						if(confirmContinue == JOptionPane.YES_OPTION) {
-							groupStage = new GroupStage(numGroups, numTeams, teams);
+							groupStage = new GroupStagePanel(teams, numGroups, numTeams, pointsPerWin, pointsPerLoss, pointsPerDraw, numFixtures);
+							container.add(groupStage, "Group Stage");
+							cardLayout.show(container, "Group Stage");
 						}
 					}else {lblError.setText("ERROR: Please submit number of points per win/draw/loss!");}
 				}
@@ -261,10 +261,6 @@ public class GroupStageCreationPanel extends JPanel
 				});
 				add(numGroupsField, "cell 2 0,alignx right");
 				
-					
-					
-					
-					
 					numTeamsField = new JTextField();
 					numTeamsField.setColumns(3);
 					numTeamsField.addActionListener(new ActionListener() {
@@ -458,5 +454,48 @@ public class GroupStageCreationPanel extends JPanel
 		public Object[] getGroupStageData() {
 			Object[] toReturn = {teams, pointsPerWin, pointsPerDraw, pointsPerLoss, numFixtures};
 			return toReturn;
+		}
+		}
+		
+		
+		
+		
+		class GroupStagePanel extends JPanel
+		{
+			private JComboBox<String> cardCombo = new JComboBox<String>();
+			private CardLayout cardLayout = new CardLayout();
+			private JPanel groupsContainer = new JPanel(cardLayout);
+			private JScrollPane scrollPane = new JScrollPane(groupsContainer);
+			/**
+			 * Create the panel.
+			 */
+			public GroupStagePanel(ArrayList<String> teams, int numOfGroups, int numOfTeams, int PPWin, int PPDraw, int PPLoss, NumFixtures numFixtures)
+				{
+					setLayout(new MigLayout("", "[][][][][grow][][][][]", "[][grow]"));
+					add(scrollPane, "cell 0 1 9 1,grow");
+				
+					Random rand = new Random();
+					for (int groupNum = 1; groupNum <= numOfGroups; groupNum++) {
+						ArrayList<String> groupTeamNames = new ArrayList<String>();
+						for (int teamNum = numOfTeams; teamNum > 0; teamNum--) {
+							int numOfNamesLeft = teams.size();
+							int nameToAddIndex = rand.nextInt(numOfNamesLeft);
+							String nameToAdd = teams.get(nameToAddIndex);
+							teams.remove(nameToAddIndex);
+							groupTeamNames.add(nameToAdd);
+						}
+						cardCombo.addItem("Group " + groupNum);
+						groupsContainer.add(new GroupPanel(groupTeamNames, PPWin, PPDraw, PPLoss, numFixtures));
+						
+					}
+					cardCombo.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							String item = cardCombo.getSelectedItem().toString();
+							cardLayout.show(groupsContainer, item);
+						}
+					});
+					add(cardCombo, "cell 4 0,growx");
+				}
+
 		}
 	}
