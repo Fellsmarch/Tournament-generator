@@ -22,7 +22,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
-import javax.swing.JToggleButton;
 
 
 
@@ -72,7 +71,9 @@ public class GroupStageCreationPanel extends JPanel
 		 * Create the panel.
 		 */
 		public GroupStageCreationPanel() {
-			add(container);
+			setLayout(new MigLayout("", "[grow]", "[grow]"));
+			add(container, "grow");
+			
 			GetGroupStageDataPanel mainWindow = new GetGroupStageDataPanel();
 			container.add(mainWindow, "Main Window");
 			cardLayout.show(container, "Main Window");
@@ -203,7 +204,7 @@ public class GroupStageCreationPanel extends JPanel
 						if(chckbxPoints.isSelected()) {
 						int confirmContinue = JOptionPane.showConfirmDialog(null, "Are you sure you want to continue with these teams?", "Confirm Continue", JOptionPane.YES_NO_CANCEL_OPTION);
 						if(confirmContinue == JOptionPane.YES_OPTION) {
-							groupStage = new GroupStagePanel(teams, numGroups, numTeams, pointsPerWin, pointsPerLoss, pointsPerDraw, numFixtures);
+							groupStage = new GroupStagePanel(teams, numGroups, numTeams, pointsPerWin, pointsPerDraw, pointsPerLoss, numFixtures);
 							container.add(groupStage, "Group Stage");
 							cardLayout.show(container, "Group Stage");
 						}
@@ -485,9 +486,14 @@ public class GroupStageCreationPanel extends JPanel
 							groupTeamNames.add(nameToAdd);
 						}
 						cardCombo.addItem("Group " + groupNum);
-						groupsContainer.add(new GroupPanel(groupTeamNames, PPWin, PPDraw, PPLoss, numFixtures));
-						
+						groupsContainer.add(new GroupPanel(groupTeamNames, PPWin, PPDraw, PPLoss, numFixtures), "Group " + groupNum);
+//						System.out.println("Added group " + groupNum + " and created a new group panel to add");
 					}
+					
+//					TablePanel tableTest = new TablePanel(teams, PPWin, PPDraw, PPLoss);
+//					cardCombo.addItem("Table test");
+//					groupsContainer.add(tableTest, "Table test");
+					
 					cardCombo.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							String item = cardCombo.getSelectedItem().toString();

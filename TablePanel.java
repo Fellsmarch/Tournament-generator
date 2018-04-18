@@ -1,9 +1,7 @@
-import java.awt.CardLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -14,28 +12,20 @@ import net.miginfocom.swing.MigLayout;
 @SuppressWarnings("serial")
 public class TablePanel extends JPanel
 {
-//		private JComboBox<String> cardCombo = new JComboBox<String>();
-//		private CardLayout cardLayout = new CardLayout();
-//		private JPanel tablesContainer = new JPanel(cardLayout);
-//		private JScrollPane scrollPane = new JScrollPane(tablesContainer);
 		private CustomTableModel tableModel;
 		private JTable table;
-		//private JTable[] tables;
 		
 		/**
 		 * Create the panel.
 		 */
 		public TablePanel(ArrayList<String> teamNameList, int PPWin, int PPDraw, int PPLoss)
 			{
-				//Create the panel
-//				setLayout(new MigLayout("", "[][][][][grow][][][][]", "[][grow]"));
-//				add(scrollPane, "cell 0 1 9 1,grow");
-				
+				setLayout(new MigLayout("", "[grow]", "[grow]"));
+
 				//Create the table
-				
-				
 				tableModel = new CustomTableModel(teamNameList, PPWin, PPDraw, PPLoss);
 				table = new JTable(tableModel);
+				add(new JScrollPane(table), "grow");
 			}
 		
 		public void addResult(int[] result) {
@@ -96,15 +86,23 @@ public class TablePanel extends JPanel
 			//I could either do this so that the user must input results for each team or have them give both teams and the scores for home team
 			//Current implementation is the latter
 			public void addResult(int[] result) {
-				int homeTeamIndex = result[0]; int awayTeamIndex = result[1];
+				int homeTeamIndex = -1; int awayTeamIndex = -1;
+				String homeTeam = teamNames.get(result[0]); String awayTeam = teamNames.get(result[1]); //Since result will return the original index, but the table reorders them
 				int goalsForHome = result[2]; int goalsAgainstHome = result[3];
+				for(int i = 0; i < numTeams; i++) {
+					if(tableData[i][1] == homeTeam) {homeTeamIndex = i;}
+					else if(tableData[i][1] == awayTeam) {awayTeamIndex = i;}
+				}
+//				System.out.println(teamNames.get(homeTeamIndex) + " v " + teamNames.get(awayTeamIndex) + " Score: " + goalsForHome + " - " + goalsAgainstHome);
 				if(goalsForHome > goalsAgainstHome) { //Home team wins
 					//Home team
 					tableData[homeTeamIndex][2] = (Integer) tableData[homeTeamIndex][2] + 1; //Since it is an array of array type Object, we have to cast to int //Add win
 					tableData[homeTeamIndex][8] = (Integer) tableData[homeTeamIndex][8] + pointsPerWin;
+					System.out.println("Giving " + teamNames.get(homeTeamIndex) + " " + pointsPerWin + " points");
 					//Away team
 					tableData[awayTeamIndex][4] = (Integer) tableData[awayTeamIndex][4] + 1; //Not sure if this will work, will have to see when it runs		//Add loss
 					tableData[awayTeamIndex][8] = (Integer) tableData[awayTeamIndex][8] + pointsPerLoss;
+					System.out.println("Giving " + teamNames.get(awayTeamIndex) + " " + pointsPerLoss + " points");
 				}else if (goalsForHome == goalsAgainstHome) { //Game draw
 					//Home team
 					tableData[homeTeamIndex][3] = (Integer) tableData[homeTeamIndex][3] + 1; //Add draw
@@ -121,9 +119,11 @@ public class TablePanel extends JPanel
 					tableData[awayTeamIndex][8] = (Integer) tableData[awayTeamIndex][8] + pointsPerWin;
 				}
 				//Add goal data for home team
+				System.out.println("Adding " + goalsForHome + " goals for " + teamNames.get(homeTeamIndex) + " and " + goalsAgainstHome + " goals against " + teamNames.get(homeTeamIndex));
 				tableData[homeTeamIndex][6] = (Integer) tableData[homeTeamIndex][6] + goalsForHome;
 				tableData[homeTeamIndex][7] = (Integer) tableData[homeTeamIndex][7] + goalsAgainstHome;
 				//Add goal data for away team
+				System.out.println("Adding " + goalsAgainstHome + " goals for " + teamNames.get(awayTeamIndex) + " and " + goalsForHome + " goals against " + teamNames.get(awayTeamIndex));
 				tableData[awayTeamIndex][6] = (Integer) tableData[awayTeamIndex][6] + goalsAgainstHome;
 				tableData[awayTeamIndex][7] = (Integer) tableData[awayTeamIndex][7] + goalsForHome;
 				

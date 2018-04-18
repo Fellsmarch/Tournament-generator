@@ -14,7 +14,7 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GroupStage implements Tournament{
+public class GroupStage {//implements Tournament{
 	
 	private ArrayList<Table> groupTables; 												//This ArrayList will hold all the groups, so this list is essentially the group stage
 	private ArrayList<ArrayList<String>> groups = new ArrayList<ArrayList<String>>(); 	//Creates an ArrayList that will hold the textual representation of a group

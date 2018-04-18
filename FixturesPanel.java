@@ -35,6 +35,7 @@ public class FixturesPanel extends JPanel
 		 * Create the panel.
 		 */
 		public FixturesPanel(ArrayList<String> teams, NumFixtures roundType, GroupPanel newParent) {
+//			System.out.println(teams.toString());
 			setLayout(new MigLayout("", "[][][][][grow][][][][]", "[][grow]"));
 			add(scrollPane, "cell 0 1 9 1,grow");
 			
@@ -158,7 +159,6 @@ public class FixturesPanel extends JPanel
 
 		class RoundPanel extends JPanel
 		{
-		public Integer[][] results;
 		private ScorePanel[] scorePanels;
 
 			/**
@@ -170,8 +170,6 @@ public class FixturesPanel extends JPanel
 					for(int i = 0; i < fixtures.length; i++) {
 						rows = "[]" + rows;
 					}
-//					
-//					setLayout(new MigLayout("", "[]", rows));
 					setLayout(new MigLayout("", "[grow][][grow][][][][][][]", "[][][][][]"));
 					
 					//This is the static stuff that never changes
@@ -194,9 +192,6 @@ public class FixturesPanel extends JPanel
 					headerBorder.setBackground(Color.BLACK);
 					headerBorder.setForeground(Color.BLACK);
 					add(headerBorder, "cell 0 2 9 1,grow");
-					
-					
-					results = new Integer[teamList.length / 2][4]; //Creates an array of each fixture holding the [homeTeamIndex, awayTeamIndex, scoreFor, scoreAgainst]
 					
 					int currentRow = 3;
 					scorePanels = new ScorePanel[fixtures.length];
@@ -275,21 +270,20 @@ public class FixturesPanel extends JPanel
 		{
 		private JTextField homeScoreField;
 		private JTextField awayScoreField;
+		@SuppressWarnings("unused")
 		private boolean dataAccepted = false;
 		private int homeScore;
 		private int awayScore;
-		private int homeTeam;
-		private int awayTeam;
 		private JCheckBox chckbxSubmit;
-		private int[] result = {homeTeam, awayTeam, homeScore, awayScore};
+		//private int[] result = {homeTeam, awayTeam, homeScore, awayScore};
 
 			/**
 			 * Create the panel.
 			 */
 			public ScorePanel(int homeTeamIndex, int awayTeamIndex)
 				{
-				homeTeam = homeTeamIndex;
-				awayTeam = awayTeamIndex;
+//				homeTeam = homeTeamIndex;
+//				awayTeam = awayTeamIndex;
 				
 				setLayout(new MigLayout("", "[][][][][]", "[]"));
 				
@@ -311,10 +305,11 @@ public class FixturesPanel extends JPanel
 							homeScore = Integer.parseInt(homeScoreField.getText());
 							awayScore = Integer.parseInt(awayScoreField.getText());
 							if (homeScore < 0 || awayScore < 0) {
-								JOptionPane.showMessageDialog(null, "Scores must be greater than 0!", "SCORE ERROR", JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(parent, "Scores must be 0 or more!", "SCORE ERROR", JOptionPane.ERROR_MESSAGE);
 							}else {
 								dataAccepted = true;
 								chckbxSubmit.setSelected(true);
+								int[] result = {homeTeamIndex, awayTeamIndex, homeScore, awayScore};
 								parent.tablePanel.addResult(result);
 								homeScoreField.setEnabled(false);
 								awayScoreField.setEnabled(false);
@@ -325,7 +320,7 @@ public class FixturesPanel extends JPanel
 //							dataAccepted = false;
 //							chckbxSubmit.setSelected(false);
 							homeScoreField.requestFocus();
-							JOptionPane.showMessageDialog(null, "Scores must be integers!", "SCORE ERROR", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(parent, "Scores must be integers!", "SCORE ERROR", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				});

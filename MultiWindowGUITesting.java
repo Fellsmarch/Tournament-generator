@@ -1,5 +1,3 @@
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.CardLayout;
 import javax.swing.JPanel;
@@ -14,18 +12,17 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 
 public class MultiWindowGUITesting {
 
 	private JFrame frame = new JFrame(); 					//Creates the frame to put the CardLayout panel in
-	private CardLayout cardLayout = new CardLayout();		//I don't exactly know why I use this
+	private CardLayout cardLayout = new CardLayout();		
 	private JPanel cardContainer = new JPanel(cardLayout);	//Creates the panel with the CardLayout that every other panel goes into
 	private String tournamentName;
-	private Tournament tournamentType;
+	@SuppressWarnings("unused")
+//	private Tournament tournamentType;
 	private JTextField textFieldTournamentName;
 	private CustomTableModelTest modelTest;
 
@@ -66,7 +63,8 @@ public class MultiWindowGUITesting {
 	 */
 	private void initialize() throws InterruptedException {
 		//frame = new JFrame();
-		frame.setBounds(100, 100, 450, 350);
+		//frame.setBounds(100, 100, 450, 350);
+		frame.setBounds(100, 100, 500, 450);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//frame.getContentPane().setLayout(new CardLayout(0, 0)); //sets the frame to CardLayout
 		frame.getContentPane().add(cardContainer);
