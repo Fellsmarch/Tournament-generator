@@ -1,20 +1,24 @@
+package groupStage;
 /**
  * A panel with two panes, the current group table and then a fixtures tab which lists the fixtures for the groups and give the user
  * a place to submit scores for those fixtures.
  */
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import multiUseClasses.FixturesPanel;
+import multiUseClasses.TablePanel;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
-public class GroupPanel extends JPanel
+public class GroupPanel extends JPanel implements Serializable 
 	{
-		TablePanel tablePanel;
+		private TablePanel tablePanel;
 		private FixturesPanel fixturesPanel;
 		/**
 		 * Create the panel.
@@ -36,5 +40,6 @@ public class GroupPanel extends JPanel
 			tabbedPane.addTab("Fixtures", fixturesPanel);
 //			System.out.println("Group panel created");
 			}
+		public TablePanel getTable() {return tablePanel;}
 
 	}

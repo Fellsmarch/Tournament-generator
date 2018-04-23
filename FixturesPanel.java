@@ -1,3 +1,4 @@
+package multiUseClasses;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -6,11 +7,14 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import groupStage.GroupPanel;
+import groupStage.NumFixtures;
 import net.miginfocom.swing.MigLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -19,7 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 @SuppressWarnings("serial")
-public class FixturesPanel extends JPanel
+public class FixturesPanel extends JPanel implements Serializable
 	{
 		
 		private String[] teamList;
@@ -60,13 +64,7 @@ public class FixturesPanel extends JPanel
 					cardLayout.show(roundsContainer, item);
 				}
 			});
-			
-//			Fixture testFixture = new Fixture(0, 1);
-//			Fixture[] tests = {testFixture, new Fixture(1, 0)};
-//			roundsContainer.add(new RoundPanel(tests));
-			
 			add(cardCombo, "cell 4 0,growx");
-			
 			int roundNum = 1;
 			for(RoundPanel round : rounds) {
 				roundsContainer.add(round, "Round " + roundNum);
@@ -74,7 +72,6 @@ public class FixturesPanel extends JPanel
 			}
 			
 			cardLayout.show(roundsContainer, "Round 1");
-			//roundsContainer.add(rounds[0], "Round 1");
 		}
 		
 		private void createRounds(int numTeams, NumFixtures roundType) {
@@ -89,7 +86,7 @@ public class FixturesPanel extends JPanel
 				rounds = new RoundPanel[numUniqueRounds];
 				allFixtures = new Fixture[rounds.length][numFixtures]; //Create an array with a slot for each round, which itself is an array for each fixture to be played each round
 			}
-
+			
 			//Creates the first round
 			cardCombo.addItem("Round 1");
 			int team1Index = 0; int team2Index = numTeams - 1;
@@ -136,18 +133,21 @@ public class FixturesPanel extends JPanel
 			if(roundType == NumFixtures.DOUBLE_ROUND_ROBIN) {
 				for(int i = 0; i < numUniqueRounds; i++) {
 					int roundToCreate = i + numUniqueRounds;
+					String roundTitle = "Round " + (roundToCreate + 1);
+					cardCombo.addItem(roundTitle);
 					int fixIndex = 0;
 					for(Fixture fixture : allFixtures[i]) {
 						allFixtures[roundToCreate][fixIndex] = new Fixture(fixture.team2, fixture.team1); //This just reverses the fixture so the home team is now away and vice versa
 						fixIndex ++;
 					}
-					rounds[roundToCreate] = new RoundPanel(allFixtures[i]);
+					rounds[roundToCreate] = new RoundPanel(allFixtures[roundToCreate]);
 				}
 				
 			}
 		}
 		
-		class Fixture { //Create
+		class Fixture implements Serializable
+		{
 			public final int team1;
 			public final int team2;
 			public Fixture(int team1, int team2) {
@@ -157,7 +157,7 @@ public class FixturesPanel extends JPanel
 			
 		}
 
-		class RoundPanel extends JPanel
+		class RoundPanel extends JPanel implements Serializable
 		{
 		private ScorePanel[] scorePanels;
 
@@ -266,7 +266,7 @@ public class FixturesPanel extends JPanel
 
 		}
 		
-		class ScorePanel extends JPanel
+		class ScorePanel extends JPanel implements Serializable
 		{
 		private JTextField homeScoreField;
 		private JTextField awayScoreField;
@@ -310,7 +310,7 @@ public class FixturesPanel extends JPanel
 								dataAccepted = true;
 								chckbxSubmit.setSelected(true);
 								int[] result = {homeTeamIndex, awayTeamIndex, homeScore, awayScore};
-								parent.tablePanel.addResult(result);
+								parent.getTable().addResult(result);
 								homeScoreField.setEnabled(false);
 								awayScoreField.setEnabled(false);
 								btnSubmit.setEnabled(false);

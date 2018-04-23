@@ -1,6 +1,8 @@
+package groupStage;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -26,7 +28,7 @@ import javax.swing.JRadioButton;
 
 
 @SuppressWarnings("serial")
-public class GroupStageCreationPanel extends JPanel
+public class GroupStageCreationPanel extends JPanel implements Serializable
 	{
 		
 		//My variables
@@ -66,7 +68,6 @@ public class GroupStageCreationPanel extends JPanel
 
 
 
-
 		/**
 		 * Create the panel.
 		 */
@@ -79,8 +80,8 @@ public class GroupStageCreationPanel extends JPanel
 			cardLayout.show(container, "Main Window");
 		}
 			
-		class GetGroupStageDataPanel extends JPanel {
-			
+		class GetGroupStageDataPanel extends JPanel implements Serializable
+		{
 			public GetGroupStageDataPanel() {
 			setLayout(new MigLayout("", "[grow][grow][grow][grow][]", "[][][][][][][][grow][grow][][][][]"));
 			
@@ -365,6 +366,8 @@ public class GroupStageCreationPanel extends JPanel
 				lblError.setText("ERROR: Team name must contain at least one character");
 			} else if (teamName.length() > 37){												//Currently this is just an arbitrary number, when I work out a limitation this can be changed
 				lblError.setText("ERROR: Team name must not be longer than 37 characters");	//37 is just the number the scroll pane can create in the default panel size that doesn't need a horizontal scroll
+			} else if (teams.contains(teamName)) {
+				lblError.setText("ERROR: That team already exists, team names must be unique");
 			}else {
 				teams.add(teamName);
 				updateOutputList();
@@ -374,6 +377,7 @@ public class GroupStageCreationPanel extends JPanel
 				int maxTeams = numGroups * numTeams; 	//The number of teams in the tournament = the number of groups * the number of teams
 				if (teams.size() >= maxTeams) { 		//If the number of teams input >= the number of teams that should be in the tournament,
 					btnTeamName.setEnabled(false);		//don't let the user input any more teams
+					teamNameField.setEnabled(false);
 					btnConfirm.setEnabled(true);
 					chckbxTeamNames.setSelected(true);
 				}else {teamNameField.requestFocus();}
@@ -408,6 +412,7 @@ public class GroupStageCreationPanel extends JPanel
 			teams.remove(length);
 			updateOutputList();
 			btnTeamName.setEnabled(true); //This is only here for if the max number of teams has been reached and the submit button has been disabled
+			teamNameField.setEnabled(true);
 			int maxTeams = numGroups * numTeams;
 			if(teams.size() < maxTeams) {
 				btnConfirm.setEnabled(false);
@@ -461,7 +466,7 @@ public class GroupStageCreationPanel extends JPanel
 		
 		
 		
-		class GroupStagePanel extends JPanel
+		public class GroupStagePanel extends JPanel implements Serializable
 		{
 			private JComboBox<String> cardCombo = new JComboBox<String>();
 			private CardLayout cardLayout = new CardLayout();
@@ -504,4 +509,6 @@ public class GroupStageCreationPanel extends JPanel
 				}
 
 		}
+		
+		public GroupStagePanel getGroupStagePanel () {return groupStage;}
 	}

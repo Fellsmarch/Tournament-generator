@@ -1,3 +1,5 @@
+package multiUseClasses;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -10,7 +12,7 @@ import javax.swing.table.AbstractTableModel;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
-public class TablePanel extends JPanel
+public class TablePanel extends JPanel implements Serializable
 {
 		private CustomTableModel tableModel;
 		private JTable table;
@@ -33,7 +35,8 @@ public class TablePanel extends JPanel
 		}
 		
 
-		class CustomTableModel extends AbstractTableModel {
+		class CustomTableModel extends AbstractTableModel implements Serializable 
+		{
 			private String[] columnNames = {"Position", "Team Name", "Wins", "Draws", "Losses", 
 					"Goal Difference", "Goals For", "Goals Against", "Points"};
 			
@@ -98,11 +101,11 @@ public class TablePanel extends JPanel
 					//Home team
 					tableData[homeTeamIndex][2] = (Integer) tableData[homeTeamIndex][2] + 1; //Since it is an array of array type Object, we have to cast to int //Add win
 					tableData[homeTeamIndex][8] = (Integer) tableData[homeTeamIndex][8] + pointsPerWin;
-					System.out.println("Giving " + teamNames.get(homeTeamIndex) + " " + pointsPerWin + " points");
+					//System.out.println("Giving " + teamNames.get(homeTeamIndex) + " " + pointsPerWin + " points");
 					//Away team
 					tableData[awayTeamIndex][4] = (Integer) tableData[awayTeamIndex][4] + 1; //Not sure if this will work, will have to see when it runs		//Add loss
 					tableData[awayTeamIndex][8] = (Integer) tableData[awayTeamIndex][8] + pointsPerLoss;
-					System.out.println("Giving " + teamNames.get(awayTeamIndex) + " " + pointsPerLoss + " points");
+					//System.out.println("Giving " + teamNames.get(awayTeamIndex) + " " + pointsPerLoss + " points");
 				}else if (goalsForHome == goalsAgainstHome) { //Game draw
 					//Home team
 					tableData[homeTeamIndex][3] = (Integer) tableData[homeTeamIndex][3] + 1; //Add draw
@@ -119,11 +122,11 @@ public class TablePanel extends JPanel
 					tableData[awayTeamIndex][8] = (Integer) tableData[awayTeamIndex][8] + pointsPerWin;
 				}
 				//Add goal data for home team
-				System.out.println("Adding " + goalsForHome + " goals for " + teamNames.get(homeTeamIndex) + " and " + goalsAgainstHome + " goals against " + teamNames.get(homeTeamIndex));
+				//System.out.println("Adding " + goalsForHome + " goals for " + teamNames.get(homeTeamIndex) + " and " + goalsAgainstHome + " goals against " + teamNames.get(homeTeamIndex));
 				tableData[homeTeamIndex][6] = (Integer) tableData[homeTeamIndex][6] + goalsForHome;
 				tableData[homeTeamIndex][7] = (Integer) tableData[homeTeamIndex][7] + goalsAgainstHome;
 				//Add goal data for away team
-				System.out.println("Adding " + goalsAgainstHome + " goals for " + teamNames.get(awayTeamIndex) + " and " + goalsForHome + " goals against " + teamNames.get(awayTeamIndex));
+				//System.out.println("Adding " + goalsAgainstHome + " goals for " + teamNames.get(awayTeamIndex) + " and " + goalsForHome + " goals against " + teamNames.get(awayTeamIndex));
 				tableData[awayTeamIndex][6] = (Integer) tableData[awayTeamIndex][6] + goalsAgainstHome;
 				tableData[awayTeamIndex][7] = (Integer) tableData[awayTeamIndex][7] + goalsForHome;
 				
