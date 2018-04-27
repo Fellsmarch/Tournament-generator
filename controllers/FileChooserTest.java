@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+@SuppressWarnings("serial")
 public class FileChooserTest extends JFrame {
   private JTextField filename = new JTextField(), dir = new JTextField();
 
