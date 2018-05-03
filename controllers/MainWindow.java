@@ -1,4 +1,8 @@
 /**
+ * The main window/controller to create tournaments
+ * 
+ * @author Harrison Cook
+ * 
  * Save/Load not currently working
  */
 
@@ -36,18 +40,39 @@ import java.io.Serializable;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenuItem;
 
+
 @SuppressWarnings("serial")
 public class MainWindow implements Serializable
 	{
-
+		/**
+		 * The frame to hold all GUI elements in
+		 */
 		private JFrame mainWindowFrame = new JFrame();
+		/**
+		 * The card layout to switch between panels
+		 */
 		private CardLayout cardLayout = new CardLayout();
+		/**
+		 * The JPanel which holds the panels
+		 */
 		private JPanel tournamentContainer = new JPanel(cardLayout);
+		/**
+		 * The tournament name, displayed at the top of the window
+		 */
 		private String tournamentName;
+		/**
+		 * The JComboBox to let the user choose what kind of tournament
+		 * they want to create
+		 */
 		private JComboBox<String> tournamentSelector = new JComboBox<String>();
+		/**
+		 * The field for the user to enter the tournament name
+		 */
 		private JTextField tournamentNameField;
 		
-		//Tournament panels
+		/**
+		 * The groupStage panel
+		 */
 		private GroupStageCreationPanel groupTournament = new GroupStageCreationPanel();
 
 		/**
@@ -224,6 +249,13 @@ public class MainWindow implements Serializable
 					}
 				});
 			}
+		
+		/**
+		 * Saves the tournament to a file
+		 * 
+		 * @param groupStage the tournament to save (hard coded to group tournament at the moment)
+		 * @param fileName the name to give the file
+		 */
 		public void saveToFile(GroupStagePanel groupStage, String fileName) {
 			fileName += ".tournament";
 			
@@ -243,7 +275,12 @@ public class MainWindow implements Serializable
 		}
 		
 
-		
+		/**
+		 * Loads a tournament from a file
+		 * 
+		 * @param fileName the file to load
+		 * @return the tournament
+		 */
 		public GroupStagePanel loadFromFile(String fileName) {
 			//fileName += ".ser";
 			GroupStagePanel groupStage = null;

@@ -18,28 +18,41 @@ import net.miginfocom.swing.MigLayout;
 @SuppressWarnings("serial")
 public class GroupPanel extends JPanel implements Serializable 
 	{
-		private TablePanel tablePanel;
-		private FixturesPanel fixturesPanel;
 		/**
-		 * Create the panel.
+		 * The table panel
 		 */
-		public GroupPanel(ArrayList<String> groupTeams, int PPWin, int PPDraw, int PPLoss, NumFixtures numFixtures)//TablePanel newTablePanel, FixturesPanel newFixturesPanel)
+		private TablePanel tablePanel;
+		/**
+		 * The fixtures panel
+		 */
+		private FixturesPanel fixturesPanel;
+		
+		/**
+		 * Construct the panel.
+		 * 
+		 * @param groupTeams the list of teams/team names
+		 * @param PPWin the number of points awarded to a team per win
+		 * @param PPDraw the number of points awarded to a team per draw
+		 * @param PPLoss the number of points awarded to a team per loss
+		 * @param The number of fixtures per group
+		 */
+		public GroupPanel(ArrayList<String> groupTeams, int PPWin, int PPDraw, int PPLoss, NumFixtures numFixtures)
 			{
 			setLayout(new MigLayout("", "[grow]", "[grow]"));
-//			System.out.println("Creating a new groupPanel");
 			tablePanel = new TablePanel(groupTeams, PPWin, PPDraw, PPLoss);
 			fixturesPanel = new FixturesPanel(groupTeams, numFixtures, this);
 			
-			
 			JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-			//JScrollPane scrollPane = new JScrollPane(tabbedPane);
-			//add(scrollPane);
 			add(tabbedPane, "grow");
 			
 			tabbedPane.addTab("Table", tablePanel);
 			tabbedPane.addTab("Fixtures", fixturesPanel);
-//			System.out.println("Group panel created");
 			}
+		
+		/**
+		 * Returns the tablePanel in used by this class
+		 * @return tablePanel
+		 */
 		public TablePanel getTable() {return tablePanel;}
 
 	}

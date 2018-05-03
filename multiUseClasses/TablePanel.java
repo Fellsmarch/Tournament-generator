@@ -1,3 +1,10 @@
+/**
+ * A JPanel that uses a custom table model to display and update a group
+ * or league tournament table
+ * 
+ * @author Harrison Cook
+ */
+
 package multiUseClasses;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,11 +21,22 @@ import net.miginfocom.swing.MigLayout;
 @SuppressWarnings("serial")
 public class TablePanel extends JPanel implements Serializable
 {
+		/**
+		 * The table model for to use in the table
+		 */
 		private CustomTableModel tableModel;
+		/**
+		 * The table to put into the JPanel
+		 */
 		private JTable table;
 		
 		/**
-		 * Create the panel.
+		 * Constructs the JPanel by creating the table model and then the table with that model
+		 * 
+		 * @param teamNameList the names of the teams in the tournament
+		 * @param PPWin the number of points awarded to a team per win
+		 * @param PPDraw the number of points awarded to a team per draw
+		 * @param PPLoss the number of points awarded to a team per loss
 		 */
 		public TablePanel(ArrayList<String> teamNameList, int PPWin, int PPDraw, int PPLoss)
 			{
@@ -30,26 +48,64 @@ public class TablePanel extends JPanel implements Serializable
 				add(new JScrollPane(table), "grow");
 			}
 		
+		/**
+		 * Calls the addResult method of CustomTableModel
+		 * 
+		 * @param result the integer array that is the result which is formatted as [homeTeamIndex, awayTeamindex, homeTeamScore, awayTeamScore]
+		 * {@link FixturesPanel.ScorePanel}
+		 */
 		public void addResult(int[] result) {
 			tableModel.addResult(result);
 		}
 		
-
-		class CustomTableModel extends AbstractTableModel implements Serializable 
+		/**
+		 * A custom table model so that the table is formatted and displayed correctly
+		 * and has the relevant information to the tournament
+		 * 
+		 * @author Harrison Cook
+		 */
+		class CustomTableModel extends AbstractTableModel  
 		{
+			/**
+			 * The column names for the table
+			 */
 			private String[] columnNames = {"Position", "Team Name", "Wins", "Draws", "Losses", 
 					"Goal Difference", "Goals For", "Goals Against", "Points"};
-			
+			/**
+			 * The data for the table
+			 */
 			private Object[][] tableData;
+			/**
+			 * The number of teams in the table (also equates to the number of rows)
+			 */
 			private int numTeams;
+			/**
+			 * The list of team names to put into the table
+			 */
 			private ArrayList<String> teamNames;
+			/**
+			 * The number of points awarded to a team per win
+			 */
 			private int pointsPerWin;
+			/**
+			 * The number of points awarded to a team per Draw
+			 */
 			private int pointsPerDraw;
+			/**
+			 * The number of points awarded to a team per Loss
+			 */
 			private int pointsPerLoss;
 			
+			/**
+			 * Constructs the custom table model
+			 * 
+			 * @param @param teamNameList the names of the teams in the tournament
+			 * @param PPWin the number of points awarded to a team per win
+			 * @param PPDraw the number of points awarded to a team per draw
+			 * @param PPLoss the number of points awarded to a team per loss
+			 */
 			public CustomTableModel(ArrayList<String> teamNameList, int PPWin, int PPDraw, int PPLoss) {
 				teamNames = teamNameList;
-				//numTeams = numberOfTeams;
 				numTeams = teamNameList.size();
 				pointsPerWin = PPWin; pointsPerDraw = PPDraw; pointsPerLoss = PPLoss;
 				
@@ -69,25 +125,51 @@ public class TablePanel extends JPanel implements Serializable
 				}
 			}
 			
-			
+			/**
+			 * Returns the number of rows in the table (which equates to the number of teams)
+			 * 
+			 * @return the number of rows in the table
+			 */
 			public int getRowCount() {
 				return numTeams;
 			}
 			
+			/**
+			 * Returns the number of columns in the table
+			 * 
+			 * @return the number of columns
+			 */
 			public int getColumnCount() {
 				return columnNames.length;
 			}
 			
+			/**
+			 * Returns the name of a column
+			 * 
+			 * @param column the column number that we want the name of
+			 * @return the columnName requested
+			 */
 			public String getColumnName(int column) {
 				return columnNames[column];
 			}
 			
+			/**
+			 * Returns the current value of a cell in the table
+			 * 
+			 * @param row the row the cell is in
+			 * @param column the column the cell is in
+			 * @return the value of the requested cell
+			 */
 			public Object getValueAt(int row, int column) {
 				return tableData[row][column];
 			}
 			
-			//I could either do this so that the user must input results for each team or have them give both teams and the scores for home team
-			//Current implementation is the latter
+			/**
+			 * Adds a result of a game to the table and re-sorts the table so that the team with
+			 * the most points is at the top of the table
+			 * 
+			 * @param result the integer array that is the result which is formatted as [homeTeamIndex, awayTeamindex, homeTeamScore, awayTeamScore] {@link TablePanel.addResult}
+			 */
 			public void addResult(int[] result) {
 				int homeTeamIndex = -1; int awayTeamIndex = -1;
 				String homeTeam = teamNames.get(result[0]); String awayTeam = teamNames.get(result[1]); //Since result will return the original index, but the table reorders them
@@ -96,16 +178,13 @@ public class TablePanel extends JPanel implements Serializable
 					if(tableData[i][1] == homeTeam) {homeTeamIndex = i;}
 					else if(tableData[i][1] == awayTeam) {awayTeamIndex = i;}
 				}
-//				System.out.println(teamNames.get(homeTeamIndex) + " v " + teamNames.get(awayTeamIndex) + " Score: " + goalsForHome + " - " + goalsAgainstHome);
 				if(goalsForHome > goalsAgainstHome) { //Home team wins
 					//Home team
 					tableData[homeTeamIndex][2] = (Integer) tableData[homeTeamIndex][2] + 1; //Since it is an array of array type Object, we have to cast to int //Add win
 					tableData[homeTeamIndex][8] = (Integer) tableData[homeTeamIndex][8] + pointsPerWin;
-					//System.out.println("Giving " + teamNames.get(homeTeamIndex) + " " + pointsPerWin + " points");
 					//Away team
 					tableData[awayTeamIndex][4] = (Integer) tableData[awayTeamIndex][4] + 1; //Not sure if this will work, will have to see when it runs		//Add loss
 					tableData[awayTeamIndex][8] = (Integer) tableData[awayTeamIndex][8] + pointsPerLoss;
-					//System.out.println("Giving " + teamNames.get(awayTeamIndex) + " " + pointsPerLoss + " points");
 				}else if (goalsForHome == goalsAgainstHome) { //Game draw
 					//Home team
 					tableData[homeTeamIndex][3] = (Integer) tableData[homeTeamIndex][3] + 1; //Add draw
@@ -122,11 +201,9 @@ public class TablePanel extends JPanel implements Serializable
 					tableData[awayTeamIndex][8] = (Integer) tableData[awayTeamIndex][8] + pointsPerWin;
 				}
 				//Add goal data for home team
-				//System.out.println("Adding " + goalsForHome + " goals for " + teamNames.get(homeTeamIndex) + " and " + goalsAgainstHome + " goals against " + teamNames.get(homeTeamIndex));
 				tableData[homeTeamIndex][6] = (Integer) tableData[homeTeamIndex][6] + goalsForHome;
 				tableData[homeTeamIndex][7] = (Integer) tableData[homeTeamIndex][7] + goalsAgainstHome;
 				//Add goal data for away team
-				//System.out.println("Adding " + goalsAgainstHome + " goals for " + teamNames.get(awayTeamIndex) + " and " + goalsForHome + " goals against " + teamNames.get(awayTeamIndex));
 				tableData[awayTeamIndex][6] = (Integer) tableData[awayTeamIndex][6] + goalsAgainstHome;
 				tableData[awayTeamIndex][7] = (Integer) tableData[awayTeamIndex][7] + goalsForHome;
 				
@@ -143,7 +220,25 @@ public class TablePanel extends JPanel implements Serializable
 				fireTableDataChanged(); //Tells the table that all data may have been updated, could update each cell, but 6 out of 9 cells will always need to be updated
 			}
 			
+			/**
+			 * A comparator for a collection which sorts a table in ascending order according
+			 * to the number of points a team has, then the team's goal difference and then 
+			 * the team's number of goals scored
+			 * 
+			 * @author Harrison Cook
+			 */
 			class TeamComparator implements Comparator<Object[]>{ //Tells the sorting method how to sort (does it in ascending order, so the return statements are reversed)
+				
+				/**
+				 * Does the comparison between two teams in the table
+				 * 
+				 * @param team1 the first team object
+				 * @param team2 the second team object (to compare against the first)
+				 * 
+				 * @return -1 if the first team should be below the second team
+				 * @return 0 if the first team should be equal to the second team
+				 * @return 1 if the first team should be above the second team
+				 */
 				public int compare(Object[] team1, Object[] team2) {
 					int team1Pts = (Integer) team1[8]; int team2Pts = (Integer) team2[8];
 					if(team1Pts < team2Pts) {return 1;}

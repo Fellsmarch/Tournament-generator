@@ -37,7 +37,7 @@ public class BinaryTree
 			if (currentNode.right != null) {
 				return nextEmptySpace(currentNode.right, currentNode);
 			}
-			
+			return new Node();
 			
 //			Node left = nextEmptySpace(currentNode.left, currentNode);
 //			if (left == null) {return left.parent;}

@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JButton;
 import java.awt.Color;
+import javax.swing.JCheckBox;
 
 @SuppressWarnings("serial")
 public class TestBracketStageCreationPanel extends JPanel
@@ -22,7 +23,7 @@ public class TestBracketStageCreationPanel extends JPanel
 		 */
 		public TestBracketStageCreationPanel()
 			{
-			setLayout(new MigLayout("", "[][grow][]", "[][][][][][][][][grow][][][0px]"));
+			setLayout(new MigLayout("", "[][grow][grow]", "[][][][][][][][][][grow][][][0px]"));
 			
 			JLabel lblNumberOfParticipants = new JLabel("Number of participants");
 			add(lblNumberOfParticipants, "cell 0 0");
@@ -79,36 +80,42 @@ public class TestBracketStageCreationPanel extends JPanel
 			JRadioButton rdbtnSeeded = new JRadioButton("Seeded ");
 			add(rdbtnSeeded, "cell 1 5");
 			
+			JLabel lblRegenerateFixturesEach = new JLabel("Re-generate fixtures each round");
+			add(lblRegenerateFixturesEach, "cell 0 6 2 1");
+			
+			JComboBox comboBox_2 = new JComboBox();
+			add(comboBox_2, "cell 2 6,growx");
+			
 			JLabel lblPleaseEnterParticipants = new JLabel("Please enter participants one by one");
 			//lblPleaseEnterParticipants.setText("Please enter participants one by one, best first");
-			add(lblPleaseEnterParticipants, "cell 0 6 3 1");
+			add(lblPleaseEnterParticipants, "cell 0 7 3 1");
 			
 			textField_2 = new JTextField();
 			textField_2.setToolTipText("Enter participant name here");
-			add(textField_2, "cell 0 7 2 1,growx");
+			add(textField_2, "cell 0 8 2 1,growx");
 			textField_2.setColumns(10);
 			
 			JButton btnNewButton = new JButton("Submit");
-			add(btnNewButton, "cell 2 7,growx");
+			add(btnNewButton, "cell 2 8,growx");
 			
 			JTextPane textPane = new JTextPane();
-			add(textPane, "cell 0 8 2 3,grow");
+			add(textPane, "cell 0 9 2 3,grow");
 			
 			JLabel lblbestOf = new JLabel("(Best of)");
 			add(lblbestOf, "cell 0 3,alignx right");
 			
 			JButton btnUndo = new JButton("Undo");
-			add(btnUndo, "cell 2 8,growx,aligny top");
+			add(btnUndo, "cell 2 9,growx,aligny top");
 			
 			JButton btnConfirm = new JButton("Confirm");
-			add(btnConfirm, "cell 2 9,growx");
+			add(btnConfirm, "cell 2 10,growx");
 			
 			JButton btnReset = new JButton("Reset");
-			add(btnReset, "cell 2 10,growx");
+			add(btnReset, "cell 2 11,growx");
 			
 			JLabel lblErrorLabel = new JLabel("");
 			lblErrorLabel.setForeground(Color.RED);
-			add(lblErrorLabel, "cell 0 11");
+			add(lblErrorLabel, "cell 0 12");
 
 			}
 

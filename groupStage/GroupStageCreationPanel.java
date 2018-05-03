@@ -1,3 +1,10 @@
+/**
+ * The JPanel which gets the information required to create a group
+ * stage/tournament from the user and then creates the group
+ * stage/tournament 
+ * 
+ * @author Harrison Cook
+ */
 package groupStage;
 
 import java.awt.event.ActionEvent;
@@ -20,6 +27,8 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTextPane;
 
+//import multiUseClasses.FixturesPanel;
+
 import java.awt.CardLayout;
 import java.awt.Color;
 import javax.swing.JComboBox;
@@ -30,46 +39,24 @@ import javax.swing.JRadioButton;
 @SuppressWarnings("serial")
 public class GroupStageCreationPanel extends JPanel implements Serializable
 	{
-		
-		//My variables
-				/**
-				 * The number of groups to be in the group stage
-				 */
-				private int numGroups;
-				/**
-				 * The number of teams to be in each group
-				 */
-				private int numTeams;
-				private boolean groupsAccepted = false; //If the input for groups has been accepted
-				private boolean teamsAccepted = false;  //If the input for teams has been accepted
-				private int pointsPerWin = 3;
-				private int pointsPerDraw = 1;
-				private int pointsPerLoss = 0;
-				private NumFixtures numFixtures = NumFixtures.SINGLE_ROUND_ROBIN;
 				
 				/**
-				 * The list of teams (their names) to be put into the groups
+				 * The group stage panel that gets displayed when all required
+				 * information has been gathered
 				 */
-				private ArrayList<String> teams = new ArrayList<String>(); //The list of team names
 				private GroupStagePanel groupStage;
+				/**
+				 * The card layout to switch between the information gathering
+				 * panel and the group stage panel itself
+				 */
 				private CardLayout cardLayout = new CardLayout();
+				/**
+				 * The container which the card layout goes into
+				 */
 				private JPanel container = new JPanel(cardLayout);
-
 				
-				//GUI Objects (instantiated here so I can call them in my methods below)
-				private JLabel lblGroups, lblTeams, lblEnterTeamNames, lblPoints, lblError, lblWin, lblDraw, lblLoss;
-				private JCheckBox chckbxGroups, chckbxTeams, chckbxTeamNames, chckbxPoints;
-				private JTextField numGroupsField, numTeamsField, teamNameField, winField, lossField, drawField;
-				private JButton btnGroups, btnTeams, btnTeamName, btnUndoTeamName, btnReset, btnPoints, btnConfirm;
-				private JTextPane teamNamesOutput;
-				private JScrollPane teamNamesContainer;
-				private JRadioButton rdbtnSingleRoundRobin, rdbtnDoubleRoundRobin;
-
-
-
-
 		/**
-		 * Create the panel.
+		 * Construct the panel.
 		 */
 		public GroupStageCreationPanel() {
 			setLayout(new MigLayout("", "[grow]", "[grow]"));
@@ -79,9 +66,64 @@ public class GroupStageCreationPanel extends JPanel implements Serializable
 			container.add(mainWindow, "Main Window");
 			cardLayout.show(container, "Main Window");
 		}
-			
-		class GetGroupStageDataPanel extends JPanel implements Serializable
+		
+		/**
+		 * A JPanel which gathers required information from the user to create
+		 * a group stage/tournament
+		 * 
+		 * @author Harrison Cook
+		 */
+		class GetGroupStageDataPanel extends JPanel
 		{
+			/**
+			 * The number of groups to be in the group stage
+			 */
+			private int numGroups;
+			/**
+			 * The number of teams to be in each group
+			 */
+			private int numTeams;
+			/**
+			 * Whether or not the user input for numGroups is valid
+			 */
+			private boolean groupsAccepted = false;
+			/**
+			 * Whether or not the user input for numTeams is valid
+			 */
+			private boolean teamsAccepted = false;
+			/**
+			 * The number of points awarded to a team per win (default 3)
+			 */
+			private int pointsPerWin = 3;
+			/**
+			 * The number of points awarded to a team per draw (default 1)
+			 */
+			private int pointsPerDraw = 1;
+			/**
+			 * The number of points awarded to a team per loss (default 0)
+			 */
+			private int pointsPerLoss = 0;
+			/**
+			 * The number of fixtures per group to play (default round robin)
+			 */
+			private NumFixtures numFixtures = NumFixtures.SINGLE_ROUND_ROBIN;
+			/**
+			 * The list of teams (their names) to be put into the groups
+			 */
+			private ArrayList<String> teams = new ArrayList<String>();
+			
+			//GUI Objects (instantiated here so I can call them in my methods below)
+			private JLabel lblGroups, lblTeams, lblEnterTeamNames, lblPoints, lblError, lblWin, lblDraw, lblLoss;
+			private JCheckBox chckbxGroups, chckbxTeams, chckbxTeamNames, chckbxPoints;
+			private JTextField numGroupsField, numTeamsField, teamNameField, winField, lossField, drawField;
+			private JButton btnGroups, btnTeams, btnTeamName, btnUndoTeamName, btnReset, btnPoints, btnConfirm;
+			private JTextPane teamNamesOutput;
+			private JScrollPane teamNamesContainer;
+			private JRadioButton rdbtnSingleRoundRobin, rdbtnDoubleRoundRobin;
+			
+			/**
+			 * Initalize the contents of the Panel
+			 */
 			public GetGroupStageDataPanel() {
 			setLayout(new MigLayout("", "[grow][grow][grow][grow][]", "[][][][][][][][grow][grow][][][][]"));
 			
@@ -282,24 +324,27 @@ public class GroupStageCreationPanel extends JPanel implements Serializable
 					add(rdbtnDoubleRoundRobin, "cell 0 2 5 1,alignx right");
 
 		}
-				
-		private void groupsButton() { //Checks to see whether the user input for the number of groups is valid and returns an error if is it not
+		
+		/**
+		 * Checks to see whether the user input for the number of groups
+		 * is valid shows an error if it is not
+		 * 
+		 */
+		private void groupsButton() {
 			
 			try {
 				numGroups = Integer.parseInt(numGroupsField.getText());
 				if (numGroups < 1) {
-					throw (new Exception()); //Should make this a specific exception
+					throw (new Exception()); 		//Should make this a specific exception
 				}
 				chckbxGroups.setSelected(true);
-				//checkboxX.setText("");
 				numTeamsField.requestFocus();
 				lblError.setText(" ");
 				groupsAccepted = true;
 				unlockTeamNamesInput();
-			} catch(Exception exception) { //Should make this a specific exception
+			} catch(Exception exception) { 			//Should make this a specific exception
 				numGroupsField.setText("");
 				chckbxGroups.setSelected(false);
-				//checkboxX.setText("x");
 				numGroupsField.requestFocus();
 				groupsAccepted = false;
 				unlockTeamNamesInput();
@@ -310,23 +355,24 @@ public class GroupStageCreationPanel extends JPanel implements Serializable
 			}
 		}
 		
-		private void teamsButton() { //Checks to see whether the user input for the number of teams is valid and returns an error if is it not
+		/**
+		 * Checks to see whether the user input for the number of teams
+		 * is valid and shows an error if it is not
+		 */
+		private void teamsButton() {
 			try {
 				numTeams = Integer.parseInt(numTeamsField.getText());
 				if (numTeams < 1) {
-					throw (new Exception()); //Should make this a specific exception
+					throw (new Exception()); 		//Should make this a specific exception
 				}
 				chckbxTeams.setSelected(true);
-				//checkboxX2.setText("");
-				//teamNameField.requestFocus();
 				winField.requestFocus();
 				lblError.setText(" ");
 				teamsAccepted = true;
 				unlockTeamNamesInput();
-			} catch(Exception exception) { //Should make this a specific exception
+			} catch(Exception exception) { 			//Should make this a specific exception
 				numTeamsField.setText("");
 				chckbxTeams.setSelected(false);
-				//checkboxX2.setText("x");
 				numTeamsField.requestFocus();
 				teamsAccepted = false;
 				unlockTeamNamesInput();
@@ -334,14 +380,15 @@ public class GroupStageCreationPanel extends JPanel implements Serializable
 			}
 		}
 		
+		/**
+		 * Checks to see if the user inputs for the number of points
+		 * is valid and shows an error if it is not
+		 */
 		private void pointsButton() {
 			try {
 				pointsPerWin = Integer.parseInt(winField.getText());
 				pointsPerDraw = Integer.parseInt(drawField.getText());
 				pointsPerLoss = Integer.parseInt(lossField.getText());
-//				if(pointsPerWin < 1 || pointsPerDraw < 1 || pointsPerLoss < 1) {
-//					throw (new Exception());
-//				}
 				chckbxPoints.setSelected(true);
 				lblError.setText(" ");
 				if(teamNameField.isEnabled()) {
@@ -354,8 +401,12 @@ public class GroupStageCreationPanel extends JPanel implements Serializable
 			}
 		}
 		
-		private void teamNameButton() { //Adds the team name input by the user to the list of teams and calls the output list to be updated
-			if (groupsAccepted && teamsAccepted) { //If both the number of groups and number of teams inputs are valid, stops the user editing them after inputing team names to prevent errors
+		/**
+		 * Adds the team name entered by the user to the list of teams
+		 * and calls the output display to be updated @see updateOutputList
+		 */
+		private void teamNameButton() {
+			if (groupsAccepted && teamsAccepted) { 		//If both the number of groups and number of teams inputs are valid, stops the user editing them after inputing team names to prevent errors
 				numGroupsField.setEditable(false);
 				btnGroups.setEnabled(false);
 				numTeamsField.setEditable(false);
@@ -386,7 +437,11 @@ public class GroupStageCreationPanel extends JPanel implements Serializable
 			
 		}
 		
-		private void updateOutputList() { //Updates the output list that shows the user what team names they have input
+		/**
+		 * Updates the output list which shows the user what team names
+		 * they have already submitted
+		 */
+		private void updateOutputList() {
 			String toAdd = "";
 			for (int index = teams.size() - 1; index >= 0; index--) { //Iterates backwards through the ArrayList so that the newest values are shown at the top of the text field
 				toAdd += teams.get(index) + "\n";
@@ -395,7 +450,11 @@ public class GroupStageCreationPanel extends JPanel implements Serializable
 			teamNamesOutput.setCaretPosition(0);
 		}
 		
-		private void unlockTeamNamesInput() { //Checks if the number of groups and number of teams inputs are valid, if they are it lets the user to input team names
+		/**
+		 * Checks if the number of groups and number of teams inputs
+		 * are valid, if they are it allows the user to input team names
+		 */
+		private void unlockTeamNamesInput() {
 			if (groupsAccepted && teamsAccepted) {
 				btnTeamName.setEnabled(true);
 				teamNameField.setEnabled(true);
@@ -403,15 +462,18 @@ public class GroupStageCreationPanel extends JPanel implements Serializable
 			else {
 				btnTeamName.setEnabled(false);
 				teamNameField.setEnabled(false);
-				//lblError.setText("ERROR: Please complete previous fields first");
 			}
 		}
 		
-		private void removeLastTeam() { //Removes the last team the user added to the list and calls the output list to be updated
+		/**
+		 * Removes the last team the user submitted and updates the output
+		 * list
+		 */
+		private void removeLastTeam() {
 			int length = teams.size() - 1;
 			teams.remove(length);
 			updateOutputList();
-			btnTeamName.setEnabled(true); //This is only here for if the max number of teams has been reached and the submit button has been disabled
+			btnTeamName.setEnabled(true); 			//This is only here for if the max number of teams has been reached and the submit button has been disabled
 			teamNameField.setEnabled(true);
 			int maxTeams = numGroups * numTeams;
 			if(teams.size() < maxTeams) {
@@ -425,7 +487,12 @@ public class GroupStageCreationPanel extends JPanel implements Serializable
 			}
 		}
 		
-		private void reset() { //Resets all values so that the user can re-enter group size, team size and team names
+		/**
+		 * Resets all values in the panel so that the user can
+		 * re-enter group size, team size and team names if they
+		 * have been locked
+		 */
+		private void reset() {
 			int confirmReset = JOptionPane.showConfirmDialog(this, "Are you sure you want to reset?\nAll data will be lost!", "Confirm reset", JOptionPane.YES_NO_CANCEL_OPTION); //Creates a popup confirming that they user wants to reset
 			if (confirmReset == JOptionPane.YES_OPTION) {
 				numGroups = 0;
@@ -457,6 +524,12 @@ public class GroupStageCreationPanel extends JPanel implements Serializable
 			}
 		}
 		
+		/**
+		 * Returns the required information to create a group stage
+		 * 
+		 * @return and object array containing the teams, points per win, 
+		 * points per draw, points per loss and the number of fixtures
+		 */
 		public Object[] getGroupStageData() {
 			Object[] toReturn = {teams, pointsPerWin, pointsPerDraw, pointsPerLoss, numFixtures};
 			return toReturn;
@@ -465,15 +538,38 @@ public class GroupStageCreationPanel extends JPanel implements Serializable
 		
 		
 		
-		
-		public class GroupStagePanel extends JPanel implements Serializable
+		/**
+		 * The JPanel used once group stage data has been collected
+		 * It contains the table panel for the tournament and the fixtures panel
+		 * {@link multiUseClasses.FixturesPanel}
+		 * {@link multiUseClasses.TablePanel}
+		 * 
+		 * @author Harrison Cook
+		 */
+		public class GroupStagePanel extends JPanel
 		{
-			private JComboBox<String> cardCombo = new JComboBox<String>();
-			private CardLayout cardLayout = new CardLayout();
-			private JPanel groupsContainer = new JPanel(cardLayout);
-			private JScrollPane scrollPane = new JScrollPane(groupsContainer);
 			/**
-			 * Create the panel.
+			 * The JComboBox for switching between the table panel
+			 * and the fixtures panel
+			 */
+			private JComboBox<String> cardCombo = new JComboBox<String>();
+			/**
+			 * The card layout to facilitate switching between the 
+			 * table panel and the fixtures panel
+			 */
+			private CardLayout cardLayout = new CardLayout();
+			/**
+			 * The container which contains the table panel and the
+			 * fixtures panel
+			 */
+			private JPanel groupsContainer = new JPanel(cardLayout);
+			/**
+			 * The scroll pane to ensure the user can see all the elements
+			 */
+			private JScrollPane scrollPane = new JScrollPane(groupsContainer);
+			
+			/**
+			 * Constructs the panel.
 			 */
 			public GroupStagePanel(ArrayList<String> teams, int numOfGroups, int numOfTeams, int PPWin, int PPDraw, int PPLoss, NumFixtures numFixtures)
 				{
@@ -492,12 +588,7 @@ public class GroupStageCreationPanel extends JPanel implements Serializable
 						}
 						cardCombo.addItem("Group " + groupNum);
 						groupsContainer.add(new GroupPanel(groupTeamNames, PPWin, PPDraw, PPLoss, numFixtures), "Group " + groupNum);
-//						System.out.println("Added group " + groupNum + " and created a new group panel to add");
 					}
-					
-//					TablePanel tableTest = new TablePanel(teams, PPWin, PPDraw, PPLoss);
-//					cardCombo.addItem("Table test");
-//					groupsContainer.add(tableTest, "Table test");
 					
 					cardCombo.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
@@ -510,5 +601,9 @@ public class GroupStageCreationPanel extends JPanel implements Serializable
 
 		}
 		
+		/**
+		 * Returns the groupStage
+		 * @return groupStage
+		 */
 		public GroupStagePanel getGroupStagePanel () {return groupStage;}
 	}
